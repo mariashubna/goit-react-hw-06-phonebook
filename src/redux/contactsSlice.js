@@ -1,8 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; 
+
+function loadContactsFromLocalStorage() {
+  const storedContacts = localStorage.getItem('contacts');
+  return storedContacts ? JSON.parse(storedContacts) : [];
+}
 
 const contactsInitialState = {
-  contacts: loadContactsFromLocalStorage(), // Load contacts from local storage initially
+  contacts: loadContactsFromLocalStorage(),
 };
 
 const contactsSlice = createSlice({
@@ -20,25 +27,18 @@ const contactsSlice = createSlice({
       },
       reducer(state, action) {
         state.contacts.push(action.payload);
-        saveContactsToLocalStorage(state.contacts); // Save contacts to local storage after adding
       },
     },
     removeContactAction(state, action) {
       state.contacts = state.contacts.filter(({ id }) => id !== action.payload);
-      saveContactsToLocalStorage(state.contacts); // Save contacts to local storage after removal
     },
   },
 });
 
+const persistConfig = {
+  key: 'contacts',
+  storage,
+};
+
 export const { addContactAction, removeContactAction } = contactsSlice.actions;
-export const contactsReducer = contactsSlice.reducer;
-
-
-function loadContactsFromLocalStorage() {
-  const storedContacts = localStorage.getItem('contacts');
-  return storedContacts ? JSON.parse(storedContacts) : [];
-}
-
-function saveContactsToLocalStorage(contacts) {
-  localStorage.setItem('contacts', JSON.stringify(contacts));
-}
+export const contactsReducer = persistReducer(persistConfig, contactsSlice.reducer);
