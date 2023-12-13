@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 2px solid darkslategrey;
+  padding: 20px;
+}
+.label {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 3;
+}
+.input {
+  display: flex;
+  flex-direction: column;
+  width: 194px;
+  padding: 6px 2px;
+}
+.btn {
+  padding: 4px 0;
+  width: 200px;
+  background-color: chartreuse;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.btn:hover {
+  background-color: blueviolet;
+  color: aliceblue;
+}
